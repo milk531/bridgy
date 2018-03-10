@@ -12,7 +12,7 @@ with warnings.catch_warnings():
     warnings.filterwarnings("ignore", category=UserWarning)
     from fuzzywuzzy import fuzz
 
-Bastion = collections.namedtuple("Bastion", "destination options")
+Bastion = collections.namedtuple("Bastion", "destination options enable")
 Instance = collections.namedtuple("Instance", "name address aliases source user")
 # allow there to be optional kwargs that default to None
 Instance.__new__.__defaults__ = (None,) * len(Instance._fields)
@@ -28,6 +28,10 @@ class InventorySource(object):
             self.name = "%s (%s)" % (kwargs['name'], self.name)
 
         if 'bastion' in kwargs:
+            if 'enable' in kwargs['bastion']:
+                if not kwargs['bastion']['enable']:
+                    self.bastion = Bastion(destination=None, options=None, enable=False)
+                    return
             if 'address' not in kwargs['bastion']:
                 raise MissingBastionHost
 
@@ -41,7 +45,7 @@ class InventorySource(object):
             if 'options' in kwargs['bastion']:
                 bastion_options = kwargs['bastion']['options']
             
-            self.bastion = Bastion(destination=destination, options=bastion_options)
+            self.bastion = Bastion(destination=destination, options=bastion_options, enable=True)
 
     @abc.abstractmethod
     def update(self): pass

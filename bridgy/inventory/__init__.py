@@ -113,7 +113,10 @@ def get_bastion(config, instance):
     
     for inv in inventory(config).inventories:
         if inv.name == instance.source and inv.bastion != None:
-            bastion = inv.bastion
+            if inv.bastion.enable:
+                bastion = inv.bastion
+            else:
+                return None
 
     if bastion == None and 'bastion' in config:
         if not config.dig('bastion', 'address'):
@@ -128,7 +131,7 @@ def get_bastion(config, instance):
 
         bastion_options = config.dig('bastion', 'options') or ''
 
-        bastion = Bastion(destination=destination, options=bastion_options)
+        bastion = Bastion(destination=destination, options=bastion_options,enable=True)
 
     return bastion
 
