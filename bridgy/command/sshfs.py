@@ -32,7 +32,10 @@ class Sshfs(object):
 
     @property
     def destination(self):
-        if self.config.dig('ssh', 'user'):
+        if self.instance.user:            
+            return '{user}@{host}'.format(user=self.instance.user,
+                                         host=self.instance.address)
+        elif self.config.dig('ssh', 'user'):
             return '{user}@{host}'.format(user=self.config.dig('ssh', 'user'),
                                           host=self.instance.address)
         else:

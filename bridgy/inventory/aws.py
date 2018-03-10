@@ -39,7 +39,10 @@ class AwsInventory(InventorySource):
         self.pill = placebo.attach(session, data_path=cache_dir)
 
         self.client = session.client('ec2')
-
+        if 'user' in kwargs and kwargs['user'] != None:
+            self.user = kwargs['user']
+        else:
+            self.user = None
     def update(self):
         try:
             self.__ec2_search(stub=False)
@@ -48,7 +51,6 @@ class AwsInventory(InventorySource):
 
     def instances(self):
         data = self.__ec2_search(stub=True)
-
         instances = []
         for reservation in data['Reservations']:
             for instance in reservation['Instances']:
@@ -82,9 +84,9 @@ class AwsInventory(InventorySource):
                 # take note of this instance
                 if name != None and address != None:
                     if len(aliases) > 0:
-                        instances.append(Instance(name, address, tuple(aliases), self.name))
+                        instances.append(Instance(name, address, tuple(aliases), self.name,self.user))
                     else:
-                        instances.append(Instance(name, address, self.name))
+                        instances.append(Instance(name, address, self.name,None,self.user))
 
         return instances
 

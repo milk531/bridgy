@@ -13,7 +13,7 @@ with warnings.catch_warnings():
     from fuzzywuzzy import fuzz
 
 Bastion = collections.namedtuple("Bastion", "destination options")
-Instance = collections.namedtuple("Instance", "name address aliases source")
+Instance = collections.namedtuple("Instance", "name address aliases source user")
 # allow there to be optional kwargs that default to None
 Instance.__new__.__defaults__ = (None,) * len(Instance._fields)
 

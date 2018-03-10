@@ -257,7 +257,7 @@ def unmount_handler(args, config):
 @utils.SupportedPlatforms('linux', 'windows', 'osx')
 def list_inventory_handler(args, config):
     instances = []
-    for ip, name, aliases, source in inventory.instances(config):
+    for ip, name, aliases, source, user in inventory.instances(config):
         if aliases:
             instances.append( (ip, name, '\n'.join(aliases), source) )
         else:
