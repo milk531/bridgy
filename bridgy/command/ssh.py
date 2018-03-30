@@ -26,6 +26,7 @@ class Ssh(object):
 
     @property
     def options(self):
+        identity = ''
         bastion = ''
         options = ''
 
@@ -37,8 +38,9 @@ class Ssh(object):
                                       destination=bastionObj.destination)
 
         options = self.config.dig('ssh', 'options') or ''
-
-        return '{} {}'.format(bastion, options)
+        if self.instance.key:
+            identity = '-i %s'%self.instance.key
+        return '{} {} {}'.format(identity,bastion, options)
 
 
     @property
