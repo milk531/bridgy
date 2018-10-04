@@ -43,6 +43,7 @@ class Sshfs(object):
 
     @property
     def options(self):
+        identity = ''
         bastion = ''
         options = ''
 
@@ -55,7 +56,9 @@ class Sshfs(object):
 
         options = self.config.dig('sshfs', 'options') or ''
 
-        return '{} {}'.format(bastion, options)
+         if self.instance.key:
+            identity = '-i %s' % self.instance.key
+        return '{} {} {}'.format(identity, bastion, options)
 
     @property
     def command(self):
