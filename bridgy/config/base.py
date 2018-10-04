@@ -18,7 +18,7 @@ class ConfigBase(object):
 
     path = "~/.bridgy/config.yml"
     inventory = "~/.bridgy/inventory"
-    mount = "~/.bridgy/mounts"
+    mount = "~/.mounts"
     conf = None
 
     def __init__(self, initial_data=None):
